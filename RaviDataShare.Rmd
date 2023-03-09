@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r load packages and login into Synapse}
 
 library(tidyverse)
 library(synapser)
@@ -34,7 +34,7 @@ RNAseqCountsTable_universalReferenceGenome <- read.csv(fileEntity$path)
 ```
 
 
-```{python pull joined metadata}
+```{python pull joined metadata Jax.IU.Pitt_5XFAD, eval=FALSE, include=FALSE}
 
 import synapseclient
 import pandas as pd
@@ -64,7 +64,8 @@ joinedMetadata = joinMetadata(biospecimenName="Jax.IU.Pitt_5XFAD_biospecimen_met
 joinedMetadata.to_csv('Jax.IU.Pitt_5XFAD_joinedMetadata.csv', index=False)
 
 ```
-```{python pull joined metadata}
+
+```{python pull joined metadata Jax.IU.Pitt_APOE4.Trem2.R47H, eval=FALSE, include=FALSE}
 
 import synapseclient
 import pandas as pd
@@ -78,7 +79,7 @@ metadataManifest = query.asDataFrame()
 def getDf (filename, metadataManifest):
   synid = metadataManifest[metadataManifest['name'] == filename]['id'].values[0]
   entity = syn.get(synid)
-  df = pd.read_csv(entity.path, sep=",", dtype=str)
+  df = pd.read_csv(entity.path, sep=",", dtype=str, encoding= 'unicode_escape')
   return(df)
 
 def joinMetadata (biospecimenName, individualName, metadataManifest):
@@ -129,8 +130,17 @@ for(i in 1:nrow(countMap)) {
 
 ```{r}
 
-Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata <- read.csv("Jax.IU.Pitt_5XFAD_joinedMetadata.csv")
+Jax.IU.Pitt_5XFAD_joinedMetadata <- read.csv("Jax.IU.Pitt_5XFAD_joinedMetadata.csv")
 
 Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata <- read.csv("Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata.csv")
 
 ```
+
+```{r tests}
+
+intersect(Jax.IU.Pitt_5XFAD_joinedMetadata$specimenID, countMap$inputSpecimenIDS)
+
+intersect(Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata$specimenID, countMap$inputSpecimenIDS)
+
+```
+
