@@ -1,0 +1,136 @@
+---
+title: "RaviDataShare"
+author: "Jared Hendrickson"
+date: "2023-03-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(synapser)
+synLogin()
+
+```
+
+```{r load counts files}
+
+fileEntity <- synGet("syn51185292")
+fiveXFAD_and_LOAD1_GRCm39_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+
+fileEntity <- synGet("syn51185294")
+fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+
+fileEntity <- synGet("syn51185293")
+LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+
+fileEntity <- synGet("syn51185316")
+RNAseqCountsTable_universalReferenceGenome <- read.csv(fileEntity$path)
+
+```
+
+
+```{python pull joined metadata}
+
+import synapseclient
+import pandas as pd
+syn = synapseclient.Synapse()
+
+syn.login(authToken = "***")
+
+query = syn.tableQuery("SELECT * FROM syn11346063.34 WHERE ( ( \"metadataType\" = 'assay' OR \"metadataType\" = 'biospecimen' OR \"metadataType\" = 'individual' ) AND ( \"study\" HAS ( 'Jax.IU.Pitt_5XFAD') ) )")
+metadataManifest = query.asDataFrame()
+
+def getDf (filename, metadataManifest):
+  synid = metadataManifest[metadataManifest['name'] == filename]['id'].values[0]
+  entity = syn.get(synid)
+  df = pd.read_csv(entity.path, sep=",", dtype=str)
+  return(df)
+
+def joinMetadata (biospecimenName, individualName, metadataManifest):
+
+  biospecimen_metadata_df = getDf(biospecimenName, metadataManifest)
+  individual_human_metadata_df = getDf(individualName, metadataManifest)
+
+  return(pd.merge(biospecimen_metadata_df, individual_human_metadata_df, on="individualID"))
+
+
+joinedMetadata = joinMetadata(biospecimenName="Jax.IU.Pitt_5XFAD_biospecimen_metadata.csv", individualName="Jax.IU.Pitt_5XFAD_individual_metadata.csv", metadataManifest=metadataManifest)
+
+joinedMetadata.to_csv('Jax.IU.Pitt_5XFAD_joinedMetadata.csv', index=False)
+
+```
+```{python pull joined metadata}
+
+import synapseclient
+import pandas as pd
+syn = synapseclient.Synapse()
+
+syn.login(authToken = "***")
+
+query = syn.tableQuery("SELECT * FROM syn11346063.34 WHERE ( ( \"metadataType\" = 'assay' OR \"metadataType\" = 'biospecimen' OR \"metadataType\" = 'individual' ) AND ( \"study\" HAS ( 'Jax.IU.Pitt_APOE4.Trem2.R47H' ) ) )")
+metadataManifest = query.asDataFrame()
+
+def getDf (filename, metadataManifest):
+  synid = metadataManifest[metadataManifest['name'] == filename]['id'].values[0]
+  entity = syn.get(synid)
+  df = pd.read_csv(entity.path, sep=",", dtype=str)
+  return(df)
+
+def joinMetadata (biospecimenName, individualName, metadataManifest):
+
+  biospecimen_metadata_df = getDf(biospecimenName, metadataManifest)
+  individual_human_metadata_df = getDf(individualName, metadataManifest)
+
+  return(pd.merge(biospecimen_metadata_df, individual_human_metadata_df, on="individualID"))
+
+
+joinedMetadata = joinMetadata(biospecimenName="Jax.IU.Pitt_APOE4.Trem2.R47H_biospecimen_metadata.csv", individualName="Jax.IU.Pitt_APOE4.Trem2.R47H_individual_metadata.csv", metadataManifest=metadataManifest)
+
+joinedMetadata.to_csv('Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata.csv', index=False)
+
+```
+
+```{r functions to transform specimenIDs in counts matrix to inputted specimenIDs}
+
+trimX <- function(specimenID) {
+  if(substr(specimenID, 1, 1) == "X") {
+    return(substr(specimenID, 2, nchar(specimenID)))
+  }
+  else {
+    return(specimenID)
+  }
+}
+
+replacePeriod <- function(specimenID) {
+  return(str_replace(specimenID, "\\.", "-"))
+}
+
+```
+
+```{r Nextflow converts sample names; this shows how to convert it back with a map}
+
+countMap <- data.frame(Nextflow_specimenIDs = colnames(RNAseqCountsTable_universalReferenceGenome), inputSpecimenIDS = NA)
+
+countMap <- countMap %>%
+  filter(!(Nextflow_specimenIDs %in% c("transcript_id", "gene_id")))
+
+for(i in 1:nrow(countMap)) {
+  countMap[i, "inputSpecimenIDS"] <- countMap[i, "Nextflow_specimenIDs"] %>% 
+    trimX() %>% 
+    replacePeriod()
+}
+
+```
+
+```{r}
+
+Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata <- read.csv("Jax.IU.Pitt_5XFAD_joinedMetadata.csv")
+
+Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata <- read.csv("Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata.csv")
+
+```
