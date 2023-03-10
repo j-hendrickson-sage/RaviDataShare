@@ -20,13 +20,13 @@ synLogin()
 ```{r load counts files}
 
 fileEntity <- synGet("syn51185292")
-fiveXFAD_and_LOAD1_GRCm39_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+fiveXFAD_and_LOAD1_GRCm39_rsem.merged.transcript_counts <- read.csv(fileEntity$path, sep = "\t")
 
 fileEntity <- synGet("syn51185294")
-fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts <- read.csv(fileEntity$path, sep = "\t")
 
 fileEntity <- synGet("syn51185293")
-LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts <- read.csv(fileEntity$path)
+LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts <- read.csv(fileEntity$path, sep = "\t")
 
 fileEntity <- synGet("syn51185316")
 RNAseqCountsTable_universalReferenceGenome <- read.csv(fileEntity$path)
