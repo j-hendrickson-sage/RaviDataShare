@@ -144,3 +144,90 @@ intersect(Jax.IU.Pitt_APOE4.Trem2.R47H_joinedMetadata$specimenID, countMap$input
 
 ```
 
+```{r}
+
+samples_5XFAD <- intersect(colnames(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts), colnames(RNAseqCountsTable_universalReferenceGenome))
+
+samples_5XFAD <- samples_5XFAD[3:length(samples_5XFAD)]
+
+```
+
+
+```{r}
+
+intersectGeneIDs <- intersect(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts$gene_id, RNAseqCountsTable_universalReferenceGenome$gene_id)
+
+fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed <- fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts %>%
+  select(gene_id, any_of(samples_5XFAD)) %>%
+  group_by(gene_id) %>%
+  summarise_at(samples_5XFAD, mean, na.rm = TRUE) %>%
+  as.data.frame() %>%
+  filter(gene_id %in% intersectGeneIDs)
+
+```
+
+
+```{r}
+
+RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_universalReferenceGenome %>%
+  select(gene_id, any_of(samples_5XFAD)) %>%
+  group_by(gene_id) %>%
+  summarise_at(samples_5XFAD, mean, na.rm = TRUE) %>%
+  as.data.frame() %>%
+  filter(gene_id %in% intersectGeneIDs)
+
+```
+
+```{r}
+
+correlations <- NULL
+
+for(i in 2:ncol(RNAseqCountsTable_universalReferenceGenomeCollapsed)) {
+  correlations <- c(correlations, cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed[,i], RNAseqCountsTable_universalReferenceGenomeCollapsed[,i]))
+}
+
+```
+
+```{r}
+
+samples_LOAD <- intersect(colnames(LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts), colnames(RNAseqCountsTable_universalReferenceGenome))
+
+samples_LOAD <- samples_LOAD[3:length(samples_LOAD)]
+
+```
+
+
+```{r}
+
+intersectGeneIDs <- intersect(LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts$gene_id, RNAseqCountsTable_universalReferenceGenome$gene_id)
+
+LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed <- LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts %>%
+  select(gene_id, any_of(samples_LOAD)) %>%
+  group_by(gene_id) %>%
+  summarise_at(samples_LOAD, mean, na.rm = TRUE) %>%
+  as.data.frame() %>%
+  filter(gene_id %in% intersectGeneIDs)
+
+```
+
+
+```{r}
+
+RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_universalReferenceGenome %>%
+  select(gene_id, any_of(samples_LOAD)) %>%
+  group_by(gene_id) %>%
+  summarise_at(samples_LOAD, mean, na.rm = TRUE) %>%
+  as.data.frame() %>%
+  filter(gene_id %in% intersectGeneIDs)
+
+```
+
+```{r}
+
+correlations <- NULL
+
+for(i in 2:ncol(RNAseqCountsTable_universalReferenceGenomeCollapsed)) {
+  correlations <- c(correlations, cor(RNAseqCountsTable_universalReferenceGenomeCollapsed[,i], LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed[,i]))
+}
+
+```
