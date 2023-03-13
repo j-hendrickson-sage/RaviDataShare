@@ -160,7 +160,7 @@ intersectGeneIDs <- intersect(fiveXFADversusRavi5XFADReference_rsem.merged.trans
 fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed <- fiveXFADversusRavi5XFADReference_rsem.merged.transcript_counts %>%
   select(gene_id, any_of(samples_5XFAD)) %>%
   group_by(gene_id) %>%
-  summarise_at(samples_5XFAD, mean, na.rm = TRUE) %>%
+  summarise_at(samples_5XFAD, sum, na.rm = TRUE) %>%
   as.data.frame() %>%
   filter(gene_id %in% intersectGeneIDs)
 
@@ -172,7 +172,7 @@ fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed <- fiveX
 RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_universalReferenceGenome %>%
   select(gene_id, any_of(samples_5XFAD)) %>%
   group_by(gene_id) %>%
-  summarise_at(samples_5XFAD, mean, na.rm = TRUE) %>%
+  summarise_at(samples_5XFAD, sum, na.rm = TRUE) %>%
   as.data.frame() %>%
   filter(gene_id %in% intersectGeneIDs)
 
@@ -206,7 +206,7 @@ intersectGeneIDs <- intersect(LOAD1versusRaviLOAD1Reference_rsem.merged.transcri
 LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed <- LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_counts %>%
   select(gene_id, any_of(samples_LOAD)) %>%
   group_by(gene_id) %>%
-  summarise_at(samples_LOAD, mean, na.rm = TRUE) %>%
+  summarise_at(samples_LOAD, sum, na.rm = TRUE) %>%
   as.data.frame() %>%
   filter(gene_id %in% intersectGeneIDs)
 
@@ -218,7 +218,7 @@ LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed <- LOAD1ver
 RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_universalReferenceGenome %>%
   select(gene_id, any_of(samples_LOAD)) %>%
   group_by(gene_id) %>%
-  summarise_at(samples_LOAD, mean, na.rm = TRUE) %>%
+  summarise_at(samples_LOAD, sum, na.rm = TRUE) %>%
   as.data.frame() %>%
   filter(gene_id %in% intersectGeneIDs)
 
