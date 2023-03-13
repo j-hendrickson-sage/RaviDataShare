@@ -165,15 +165,17 @@ fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed <- fiveX
   filter(gene_id %in% intersectGeneIDs)
 
 
-test <- read.csv("rsem.merged.gene_counts.tsv", sep = "\t") %>%
+
+fileEntity <- synGet("syn51197121")
+fiveXFADrsem.merged.gene_counts <- read.csv(fileEntity$path, sep = "\t") %>%
   select(-`transcript_id.s.`) %>%
   filter(gene_id %in% fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed$gene_id)
 
 
 correlations <- NULL
 
-for(i in 2:ncol(test)) {
-  correlations <- c(correlations, cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed[,i], test[,i]))
+for(i in 2:ncol(fiveXFADrsem.merged.gene_counts)) {
+  correlations <- c(correlations, cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed[,i], fiveXFADrsem.merged.gene_counts[,i]))
 }
 
 correlations
