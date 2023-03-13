@@ -186,6 +186,8 @@ for(i in 2:ncol(RNAseqCountsTable_universalReferenceGenomeCollapsed)) {
   correlations <- c(correlations, cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed[,i], RNAseqCountsTable_universalReferenceGenomeCollapsed[,i]))
 }
 
+correlations
+
 ```
 
 ```{r}
@@ -229,5 +231,7 @@ correlations <- NULL
 for(i in 2:ncol(RNAseqCountsTable_universalReferenceGenomeCollapsed)) {
   correlations <- c(correlations, cor(RNAseqCountsTable_universalReferenceGenomeCollapsed[,i], LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed[,i]))
 }
+
+correlations
 
 ```
