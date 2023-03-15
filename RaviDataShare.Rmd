@@ -195,6 +195,23 @@ RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_univers
 
 ```
 
+
+```{r}
+
+fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed_APPGene <- fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed %>%
+  filter(gene_id == "ENSMUSG00000022892") %>%
+  select(-gene_id) %>%
+  t()
+
+RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene <- RNAseqCountsTable_universalReferenceGenomeCollapsed %>% 
+  filter(gene_id == "ENSMUSG00000022892") %>%
+  select(-gene_id) %>%
+  t()
+
+cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed_APPGene, RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene)
+
+```
+
 ```{r}
 
 correlations <- NULL
