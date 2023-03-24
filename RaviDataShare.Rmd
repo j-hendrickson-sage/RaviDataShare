@@ -198,22 +198,6 @@ RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_univers
 
 ```{r}
 
-fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed_APPGene <- fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed %>%
-  filter(gene_id == "ENSMUSG00000022892") %>%
-  select(-gene_id) %>%
-  t()
-
-RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene <- RNAseqCountsTable_universalReferenceGenomeCollapsed %>% 
-  filter(gene_id == "ENSMUSG00000022892") %>%
-  select(-gene_id) %>%
-  t()
-
-cor(fiveXFADversusRavi5XFADReference_rsem.merged.transcript_countsCollapsed_APPGene, RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene)
-
-```
-
-```{r}
-
 correlations <- NULL
 
 for(i in 2:ncol(RNAseqCountsTable_universalReferenceGenomeCollapsed)) {
@@ -231,7 +215,6 @@ samples_LOAD <- intersect(colnames(LOAD1versusRaviLOAD1Reference_rsem.merged.tra
 samples_LOAD <- samples_LOAD[3:length(samples_LOAD)]
 
 ```
-
 
 ```{r}
 
@@ -257,6 +240,23 @@ RNAseqCountsTable_universalReferenceGenomeCollapsed <- RNAseqCountsTable_univers
   filter(gene_id %in% intersectGeneIDs)
 
 ```
+
+```{r}
+
+LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed_APPGene <- LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed %>%
+  filter(gene_id == "ENSMUSG00000022892") %>%
+  select(-gene_id) %>%
+  t()
+
+RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene <- RNAseqCountsTable_universalReferenceGenomeCollapsed %>% 
+  filter(gene_id == "ENSMUSG00000022892") %>%
+  select(-gene_id) %>%
+  t()
+
+cor(LOAD1versusRaviLOAD1Reference_rsem.merged.transcript_countsCollapsed_APPGene, RNAseqCountsTable_universalReferenceGenomeCollapsed_APPGene)
+
+```
+
 
 ```{r}
 
